@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行喜用测试：哪个女爱豆最旺你？</title>
+    <style>
+        :root {
+            --gold: #e5e5e5; --fire: #ff4d4d; --water: #4d94ff; --wood: #82c91e; --earth: #d9a75d;
+            --bg: #0b0b0e; --card: #16161a; --text: #e0e0e0;
+        }
+        body { 
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+        #app { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; }
+        .container { 
+            background: var(--card); 
+            border-radius: 24px; 
+            padding: 30px; 
+            border: 1px solid #2a2a30; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        #quiz, #result { display: none; } 
+
+        h1 { font-size: 1.5rem; text-align: center; color: #fff; margin-bottom: 15px; letter-spacing: 2px; }
+        
+        .intro-section { margin-bottom: 25px; }
+        .announcement-title { color: var(--fire); font-weight: bold; font-size: 1rem; margin-bottom: 10px; display: block; text-align: center; }
+        .announcement-body { font-size: 0.9rem; line-height: 1.6; color: #bbb; text-align: justify; margin-bottom: 15px; }
+        .warning-box { background: #1f1f26; padding: 15px; border-radius: 12px; border: 1px dashed #444; margin-bottom: 15px; }
+        .warning-text { font-size: 0.8rem; line-height: 1.5; color: #888; }
+        .start-hint { font-size: 0.95rem; color: #fff; text-align: center; font-weight: bold; margin-top: 20px; display: block; }
+
+        .curtain-tag { display: inline-block; background: #333; color: #aaa; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-bottom: 15px; }
+        .progress-container { height: 4px; background: #2a2a30; border-radius: 2px; margin-bottom: 25px; overflow: hidden; }
+        #progress-bar { height: 100%; background: linear-gradient(90deg, var(--water), var(--fire)); width: 0%; transition: 0.4s; }
+        .question-title { font-size: 1.1rem; line-height: 1.5; margin-bottom: 25px; color: #fff; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { background: #23232a; border: 1px solid #3a3a45; padding: 15px; border-radius: 12px; color: var(--text); cursor: pointer; text-align: left; transition: all 0.2s; font-size: 0.9rem; line-height: 1.4; }
+        .option-btn:hover { background: #2d2d38; border-color: var(--gold); transform: translateY(-1px); }
+        
+        .result-card-animation { animation: fadeIn 0.8s ease forwards; }
+        .attr-box { margin-bottom: 25px; padding: 20px; border-radius: 18px; background: #1f1f26; border-left: 6px solid; }
+        .attr-title { font-size: 0.85rem; color: #888; margin-bottom: 10px; font-weight: bold; }
+        .attr-name { font-size: 1.4rem; font-weight: bold; margin-bottom: 8px; }
+        .attr-keywords { font-size: 0.8rem; opacity: 0.8; margin-bottom: 10px; letter-spacing: 1px; }
+        .attr-desc { color: #bbb; font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px; text-align: justify; }
+        .idol-info { font-size: 0.9rem; color: #fff; font-weight: bold; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; }
+
+        .idol-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .idol-item { text-align: center; }
+        .idol-img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; border: 1px solid #333; }
+        .idol-name { font-size: 0.75rem; color: #aaa; margin-top: 5px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .start-btn { width: 100%; padding: 16px; background: #fff; color: #000; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="home" class="container">
+        <h1>✨ 五行星运测试 ✨</h1>
+        
+        <div class="intro-section">
+            <span class="announcement-title">【关于本次测试的重要申明】</span>
+            <div class="announcement-body">
+                利用八字命理与流行审美心理学构建，旨在通过沉浸式的爱豆模拟场景，挖掘你潜意识中真正契合的能量频率。我们将为你匹配出那些命盘能量最能“旺”你的本命爱豆。
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-text">
+                    ⚠️ 请注意：<br>
+                    本次测试结果仅供娱乐与情感消遣。追星的核心意义在于自我投射与快乐获取。无论测试结果匹配了哪位爱豆，你对偶像的热爱与坚持，才是那股最真实的力量。
+                </div>
+            </div>
+
+            <span class="start-hint">星运之门即将开启，请放空大脑，跟随你的直觉，开启这场寻找“灵魂本命”的星梦之旅。</span>
+        </div>
+
+        <button class="start-btn" onclick="startTest()">开启鉴定</button>
+    </div>
+
+    <div id="quiz" class="container">
+        <div id="curtain-label" class="curtain-tag">加载中...</div>
+        <div class="progress-container"><div id="progress-bar"></div></div>
+        <div id="q-title" class="question-title"></div>
+        <div id="q-options" class="options"></div>
+    </div>
+
+    <div id="result" class="container result-card-animation">
+        <h1 style="margin-bottom: 25px;">🌟 星运鉴定报告</h1>
+        <div id="primary-box" class="attr-box"></div>
+        <div id="secondary-box" class="attr-box"></div>
+        <button class="start-btn" style="background: #333; color: #fff;" onclick="location.reload()">重新鉴定</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { curtain: "第一幕：练习生选拔（初见）", t: "1. 你站在顶级娱乐公司的练习室门前，推开门的一瞬间，镜子里倒映出的你穿着哪种私服？", o: { A: "剪裁利落的廓形西装，搭配精致冷感的妆容和高挑的身材，像个利落的超模。", B: "贴身的红色短背心，妆造是热情的大波浪，整个人像一团行走的火焰。", C: "质地轻盈的真丝白衬衫，长发微卷，皮肤透着亮泽的水光感，像流动的清泉。", D: "森系棉麻宽松套装，乌黑长发直垂腰间，几乎素颜，散发着草木般的生机。", E: "经典的大地色系风衣，妆面是高级的哑光质感，透着一种沉稳可靠的大小姐底气。" } },
+        { curtain: "第一幕：练习生选拔（初见）", t: "2. 练习生考核即将开始，为了展现你的灵魂本色，你决定表演哪一首曲子？", o: { A: "aespa《Whiplash》：极致的工业风与未来感，冷冽且精准。", B: "林娜琏《Pop!》：清新爽利，像夏天刚拧开的汽水，充满自然能量。", C: "IVE《Love Dive》：华丽而神秘，像爱河般让人不知不觉陷入其中。", D: "Red Velvet《feel my rhythm》：自带一种如同油画般的叙事感，既灵动又富有层次。", E: "少女时代《再次重逢的世界》：古早经典，拥有怀旧的信念感。" } },
+        { curtain: "第一幕：练习生选拔（初见）", t: "3. 面对各大巨头的争夺，你会签下哪份改变命运的契约？", o: { A: "SM娱乐：极致的AI视觉与超现实概念，把你包装成精致到发丝的完美偶像。", B: "YG娱乐：主打极致的热情与张扬，是顶尖 Hip-hop 音乐人的摇篮。", C: "某流派创意公司：追求流动的营运模式，在多变的市场中如鱼得水、自找通路。", D: "HYBE：注重自然生机与概念，拥有极强的生命力与不断生长的创意。", E: "JYP娱乐：强调人性美与扎实的基础练习，给你一种大地般的包容与安全感。" } },
+        { curtain: "第二幕：正式出道", t: "4. 官宣出道前，公司发起“动物塑”投票，你暗暗期待粉丝形容你是：", o: { A: "银狐或雪豹：眼神锐利，自带一种高贵、疏离且冷冽的气质。", B: "杜宾或火狐：充满力量感与表现力，像一团跳动的火焰，让人一眼难忘。", C: "天鹅或水母：优雅灵动，有着流线型的美感，像水一样温柔却难以捕捉。", D: "小鹿或兔子：眼神清亮，带着森林的气息，让人感到治愈、清新且充满生机。", E: "缅因猫或小熊：稳重、可靠、有着厚实的质感，给人极强的安全感。" } },
+        { curtain: "第二幕：正式出道", t: "5. 团队分工时，你觉得自己最适合担任哪个角色？", o: { A: "负责Rapper或主唱：像冷静的指挥官，成为团队坚硬且锐利的灵魂核心。", B: "门面担当：用最亮丽的外表和爆破般的表情管理，瞬间抓取全场视线。", C: "综艺担当：用高情商征服观众，为团队打下坚实的知名度基础。", D: "队长或作曲人：代表团队的创新与革新，像破土的春芽一样充满生命力。", E: "全能ACE：各项无短板，填补任何空隙，是团队的定海神针。" } },
+        { curtain: "第二幕：正式出道", t: "6. 组合大获成功！拿到第一笔巨额结算后，你会选择买什么犒劳自己？", o: { A: "高端的珠宝首饰：冰冷而闪耀，那是成功最直观的质感。", B: "各种潮牌尖货：穿上最亮眼的装扮，去享受属于你的庆功宴。", C: "高级质感的香水：让迷人的香气像水波一样包围自己，治愈疲惫。", D: "精致的面霜护肤品：呵护自己的自然状态，让身体重获生机。", E: "什么都不买，存起来：看着存折上稳步增长的数字，内心才最踏实。" } },
+        { curtain: "第三幕：成名后的风暴", t: "7. 你在社交媒体刷到了关于你的高赞“黑评”，哪种评价最让你觉得“这正是我想要的假象”？", o: { A: "“流水线出的冷血机器人”：吐槽你表情太淡，显得高冷，像块冷冰冰的金属。", B: "“情绪不稳定的疯子”：批评你胜负欲太强，让人压力巨大。", C: "“毫无底线的媚粉咖”：攻击你性格太软，处处讨好却显得心机深沉、不够真实。", D: "“包装过头的圣母”：乐于慈善，永远‘正能量’，有卖弄人设的嫌疑。", E: "“无聊透顶的背景板”：队内隐身的存在，但队内分成拿到手软。" } },
+        { curtain: "第三幕：成名后的风暴", t: "8. 面对网络上的汹涌恶评，你内心的真实反应是：", o: { A: "直接寻找法律手段：决断且高效，用硬邦邦的法条起诉造谣者。", B: "越来越气！甚至想立刻开个直播，用言语狠狠地“顶撞”回去。", C: "公关柔化：表面上任性无所谓，背地里寄希望于用公关手段悄悄化解矛盾。", D: "保持君子风度：虽然有些自负和不服，但依然像树木般坦荡，不予计较。", E: "恪守“豆德”：相信厚道的人自有天助，无为而治，等待时间证明一切。" } },
+        { curtain: "第四幕：互动与回归", t: "9. 出道首场粉丝见面会，你准备送给粉丝一份亲手制作的礼物：", o: { A: "定制的金属徽章或璀璨的亮片饰物：闪耀且永恒。", B: "印有签名的限量拍立得：热情珍贵的合照机会给粉丝留下难忘的回忆。", C: "玻璃质感的晶莹香氛：气味清新如流动的泉水，温柔包裹。", D: "手工缝制的棉质香囊：装着干花，清新自然，挂在腰间陪伴粉丝。", E: "自己做的手工饼干：实用、朴实，给人温暖踏实的陪伴感。" } },
+        { curtain: "第五幕：流量漩涡", t: "11. 组合第一次参加大型拼盘演唱会，候场时你发现对家女团穿了和你几乎一模一样的打歌服，你会：", o: { A: "面无表情地路过，并在上台前临时剪掉袖子或增加金属配饰，靠气场压制。", B: "眼神里瞬间燃起战火，在舞台上表演时故意增加高难度互动，把对方衬成背景板。", C: "像没看见一样温柔打招呼，并在合照时巧妙利用站位让自己显得更轻盈灵动。", D: "觉得这是一种奇妙的缘分，甚至想去问问对方衣服是在哪家工作室定制的。", E: "冷静地坐着闭目养神，坚信“撞衫不可怕，谁没作品谁尴尬”。" } },
+        { curtain: "第五幕：流量漩涡", t: "12. 录制团综时进入“真心话”环节，被问到“如果可以交换身体，你最想变成哪位成员”，你内心的真实想法是：", o: { A: "谁也不想变，我对自己这副精密的“爱豆躯壳”非常满意。", B: "变身那个最有野心的成员，看看她脑子里到底在策划什么宏图大业。", C: "变成那个最受宠的小幺，体验一下被所有人包围呵护的感觉。", D: "变成那个不用营业、可以随时在宿舍躺平长蘑菇的“佛系”成员。", E: "变成队长，掌握话语权，把团队带向更成功的方向。" } },
+        { curtain: "第五幕：流量漩涡", t: "13. 假如你是那个决定组合回归概念的“创意总监”，你这一季想尝试的视觉基调是：", o: { A: "赛博废土： 银色机械肢体、霓虹冷光、充满未来感的荒凉。", B: "歌剧魅影： 浓烈的红丝绒、破碎的宝石、极致的戏剧冲突感。", C: "魔女宅急便： 极光色的纱裙、流动的光影、如梦似幻的空灵。", D: "仲夏夜惊魂： 繁茂的植物、永恒日出与鲜花，略带恐怖的视觉盛宴。", E: "博物馆奇妙夜：古典主义、静谧的灰调、充满时间积淀的质感。" } },
+        { curtain: "第五幕：流量漩涡", t: "14. 你的“站姐”拍到了一张你极其崩坏的生图并误发了出来，你的第一反应是：", o: { A: "迅速联系公司公关，执行撤稿方案，不留一丝痕迹。", B: "既然已经被看到了，干脆在个人社交平台发一张更丑的自拍自黑，化解危机。", C: "放任不管，在泡泡里跟粉丝撒娇卖惨“虐粉”。", D: "觉得无所谓，这就是真实的我，甚至觉得那张图里的我很有“生机”。", E: "认真分析那张图的灯光和角度，思考下次如何更严谨地管理表情。" } },
+        { curtain: "第五幕：流量漩涡", t: "15. 某位当红顶流男星在直播中不小心露出了你的同款手机壳，全网都在传你们的“绯闻”，你会：", o: { A: "让公司出面发一份公文，严厉谴责造谣者，追求事实的稳固性。", B: "在接下来的机场街拍中，故意换一个更夸张、更具挑衅意味的手机壳。", C: "像云雾一样含糊其辞，不承认也不否认，享受这种暧昧的关注度。", D: "发一张和队友一起玩闹的照片，配文“还是和欧尼在一起最开心”，侧面澄清。", E: "保持沉默，直到舆论平息，相信谣言止于智者。" } },
+        { curtain: "第六幕：聚光灯外（私人时刻）", t: "16. 深夜收工后，你拖着疲惫的身体回到宿舍，你舒缓压力的方式是：", o: { A: "到健身房锻炼，放空大脑。", B: "吃一份美味夜宵，满足胃口。", C: "泡一个点着香薰蜡烛的长浴，感受被水包裹的治愈。", D: "照顾阳台上的花草，或者做手工编织。", E: "整理这一天的复盘日志，规划好明天。" } },
+        { curtain: "第六幕：聚光灯外（私人时刻）", t: "17. 假如你的爱豆生涯被拍成电影，你觉得电影的结局画面应该是：", o: { A: "站在空无一人的舞台中央，聚光灯打在身上，折射出冷冽的光。", B: "在漫天的彩带和尖叫声中，你热情地打过招呼转过身离开。", C: "在海边，看着夕阳没入水面，你终于卸下了所有的妆容。", D: "奔跑在一片无垠的草地上，手里抓着一把刚采的野花。", E: "坐在宽大的红木办公桌后，身份已经变成了公司的高层决策者。" } },
+        { curtain: "第六幕：聚光灯外（私人时刻）", t: "18. 假如可以拥有一种“爱豆超能力”，你最想拥有的是：", o: { A: "钢筋铁骨： 永远不会疲劳，不需要睡眠，像机器一样完美。", B: "魅惑之眼： 只要对视三秒，任何人都会成为你的真爱粉/黑粉（随机产生）。", C: "读心术： 能精准捕捉粉丝和黑粉的心理，游烈有余。", D: "超强审美：能轻松打造出属于自己的穿搭和妆容sense，Ins疯狂涨粉。", E: "锦鲤体质：关于自己的黑料全部消失，永不“塌房”" } },
+        { curtain: "第六幕：聚光灯外（私人时刻）", t: "19. 如果你要为你的个人香水代言，它的前调、中调、后调的整体感觉是：", o: { A: "冷萃咖啡与薄荷： 醒脑、清冷、带着金属质感的疏离。", B: "烈酒与皮革： 辛辣、张狂、带着荷尔蒙的侵略性。", C: "雨后的苔藓与海盐： 潮湿、轻盈、带着流动的透明感。", D: "刚修剪的草坪与泥土： 自然、生动、充满原始的生命力。", E: "檀香与古书卷： 沉静、稳重、带着岁月的厚实感。" } },
+        { curtain: "第六幕：聚光灯外（私人时刻）", t: "20. 梦境彻底醒来前，一个声音问你：“如果注定会被遗忘，你还要出道吗？”你下意识的回答是：", o: { A: "“我给娱乐产业带来了变革。我是一个先驱者，这就足够了”", B: "“即便被遗忘，我也是红极一时的存在。”", C: "“这只是人生的一段流水，流过便好，不求永恒。”", D: "“我就像一棵树，即便没人看，我也在生长，超越自己。”", E: "“赚够钱了，谁还会管那么多。”" } }
+    ];
+
+    const idolImages = {
+        '柳智敏': './karina.jpg', 
+        'gawon': './gawon.jpg', 
+        '申留真': './ryujin.jpg', 
+        '宁艺卓': './ningning.jpg', 
+        '林娜琏': './nayeon.jpg', 
+        'yuna': './yuna.jpg',
+        '张元英': './wonyoung.jpg', 
+        'jennie': './jennie.jpg', 
+        '金冬天': './winter.jpg',
+        'anna': './anna.jpg', 
+        '名井南': './mina.jpg', 
+        '宫胁咲良': './sakura.jpg',
+        'minji': './minji.jpg', 
+        '裴珠泫': './irene.jpg', 
+        '金泰妍': './taeyeon.jpg'
+    };
+
+    const results = {
+        A: { name: "[金] 属性：冷冽如锋", keywords: "关键词： 锐利、精准、高级感", desc: "你追求极致的秩序与美感，容易被冷调、有金属质感的爱豆“控死”。金元素旺盛的她们，眼神中自带一种杀伐果决的锐气，舞台表现精准如仪器。她们能旺你的事业心，让你在纷乱中保持最清醒的判断。", idols: ["柳智敏", "gawon", "申留真"], color: "#e5e5e5" },
+        B: { name: "[火] 属性：灼人统治者", keywords: "关键词： 爆发、耀眼、生命热度", desc: "你天生会被那种“燃”的东西打动，渴望炽热、直接的情感连接。火元素密集的爱豆是天生的舞台捕猎者，她们的能量能瞬间点燃你的斗志。她们那种如烈火般的感染力就是你最好的强心剂。", idols: ["宁艺卓", "林娜琏", "yuna"], color: "#ff4d4d" },
+        C: { name: "[水] 属性：流动的全能者", keywords: "关键词： 灵动、包裹、多面性", desc: "你喜欢流动的、无法被轻易定义的能量。水属性的爱豆拥有极强的环境适应力，能在清纯与性感间无缝切换。她们能化解你性格中的燥气，让你学会在复杂的世界里像水一样圆滑且强大。", idols: ["张元英", "jennie", "金冬天"], color: "#4d94ff" },
+        D: { name: "[木] 属性：治愈精灵", keywords: "关键词： 生机、舒展、原生感", desc: "你内心深处渴望一种“向上生长”的力量，容易被那种自带草木清香、性格坚韧却外表柔和的气质吸引。木元素较多的爱豆，往往拥有极强的生命力，能在你疲惫时提供最温润的治愈。", idols: ["anna", "名井南", "宫胁咲良"], color: "#82c91e" },
+        E: { name: "[土] 属性：定海神针", keywords: "关键词： 沉稳、厚实、信念感", desc: "在浮躁的时代，你更看重“扎根”的深度。土属性旺盛的爱豆给人一种大地般的安全感，她们或许不争抢一时的锋芒，但每一次出现都极其稳健。她们能旺你的心态，让你在焦虑中寻找到一份长久的宁静。", idols: ["minji", "裴珠泫", "金泰妍"], color: "#d9a75d" }
+    };
+
+    let currentQ = 0;
+    let scores = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+
+    // 新增图片预加载函数
+    function preloadIdolImages() {
+        for (let name in idolImages) {
+            const img = new Image();
+            img.src = idolImages[name];
+        }
+    }
+
+    function startTest() {
+        preloadIdolImages(); // 开启测试时后台同步加载图片
+        document.getElementById('home').style.display = 'none';
+        document.getElementById('quiz').style.display = 'block';
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentQ];
+        document.getElementById('curtain-label').innerText = q.curtain;
+        document.getElementById('q-title').innerText = q.t;
+        const optBox = document.getElementById('q-options');
+        optBox.innerHTML = '';
+        Object.keys(q.o).forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = q.o[key];
+            btn.onclick = () => selectOption(key);
+            optBox.appendChild(btn);
+        });
+        document.getElementById('progress-bar').style.width = ((currentQ / questions.length) * 100) + '%';
+    }
+
+    function selectOption(key) {
+        scores[key]++;
+        currentQ++;
+        if (currentQ < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+        renderBox('primary-box', sorted[0][0], "👑 第一旺：核心本命");
+        renderBox('secondary-box', sorted[1][0], "✨ 第二旺：潜力加持");
+    }
+
+    function renderBox(id, key, title) {
+        const data = results[key];
+        const box = document.getElementById(id);
+        box.style.borderColor = data.color;
+        let idolsHtml = '';
+        data.idols.forEach(name => {
+            const imgUrl = idolImages[name] || './placeholder.jpg';
+            idolsHtml += `<div class="idol-item">
+                <img src="${imgUrl}" alt="${name}" class="idol-img">
+                <div class="idol-name">${name}</div>
+            </div>`;
+        });
+        box.innerHTML = `
+            <div class="attr-title">${title}</div>
+            <div class="attr-name" style="color:${data.color}">${data.name}</div>
+            <div class="attr-keywords" style="color:${data.color}">${data.keywords}</div>
+            <div class="attr-desc">${data.desc}</div>
+            <div class="idol-info">推荐入股爱豆：</div>
+            <div class="idol-gallery">${idolsHtml}</div>
+        `;
+    }
+</script>
+</body>
+</html>
